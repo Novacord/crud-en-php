@@ -210,7 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="text" placeholder="Team" name="perfil[team]" autocomplete="off" value="<?php echo isset($team) ? $team :null;?>">
                     <input type="text" placeholder="Trainer" name="perfil[trainer]" autocomplete="off" value="<?php echo isset($trainer) ? $trainer :null;?>">
                 </div>
-                <div class="col gap-3">
+                <div class="col gap-3 row-invert">
                     <div class="gap">
                         <button type="submit" name="agregar" value="Botón 1"><i class="bi bi-check-lg"></i></button>
                         <button type="submit" name="eliminar" value="Botón 2"><i class="bi bi-x"></i></button>
