@@ -1,3 +1,9 @@
+
+.extraer{
+    border: none;
+    background: transparent;
+}
+
 section {
     display: flex;
     flex-direction: column;
@@ -49,9 +55,11 @@ table {
   }
 
   #sector-con-scroll {
-    max-height: 288px;
+    max-height: 429px;
     overflow-y: scroll; 
   }
+
+
 
 
 @media (max-width: 767px) {
