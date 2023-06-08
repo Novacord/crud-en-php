@@ -24,6 +24,35 @@ section {
     margin-top: 2rem;
 }
 
+.gap {
+    display: flex;
+    gap: 30%;
+    justify-content: center;
+}
+
+.gap button{
+    width: 6rem;
+}
+
+.gap-3 > * + * {
+    margin-top: 2.5rem;
+}
+
+table {
+    border: 1px solid black;
+    border-collapse: collapse; 
+    width: 100%;
+  }
+  th, td {
+    border: 1px solid black;
+    padding: 8px;
+  }
+
+  #sector-con-scroll {
+    max-height: 288px;
+    overflow-y: scroll; 
+  }
+
 
 @media (max-width: 767px) {
     .row-invert {
