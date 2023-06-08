@@ -47,32 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         
     }
-    if (isset($_POST['dar'])) {
-        if (isset($_POST['editar'])) {
-            $url = 'https://6481e26229fa1c5c50323e5f.mockapi.io/formulario/' . $_POST['dar'];
-            $data = [
-                "nombre" => $_POST['perfil']['nombre'],
-                "apellido" => $_POST['perfil']['apellido'],
-                "direccion" => $_POST['perfil']['direccion'],
-                "edad" => $_POST['perfil']['edad'],
-                "email" => $_POST['perfil']['email'],
-                "horarioEntrada" => $_POST['perfil']['horarioEntrada'],
-                "team" => $_POST['perfil']['team'],
-                "trainer" => $_POST['perfil']['trainer'],
-                "cc" => $_POST['perfil']['cc'],
-            ];
-            $data = json_encode($data);
-    
-            $credenciales["http"]["method"] = "PUT";
-            $credenciales["http"]["header"] = "Content-type: application/json";
-            $credenciales["http"]["content"] = $data;
-            $config = stream_context_create($credenciales);
-    
-            $resultado = file_get_contents($url, false, $config);
-        }
-    }
 
-    if (isset($_POST['dar'])) {
+    if (isset($_POST['dar'])){
         $urlG = 'https://6481e26229fa1c5c50323e5f.mockapi.io/formulario';
         $urlGet = $urlG . '/' . $_POST['dar'];
         $credencialesG["http"]["method"] = "GET";
@@ -90,7 +66,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $team = $data['team'];
         $trainer = $data['trainer'];
         $cc = $data['cc'];
-}
+        $id = $data['id'];
+    }
+
+
+    if (isset($_POST['editar'])) {
+        $urlPU = 'https://6481e26229fa1c5c50323e5f.mockapi.io/formulario/'.$_POST['dar'];
+        $data = [
+            "nombre" => $_POST['perfil']['nombre'],
+            "apellido" => $_POST['perfil']['apellido'],
+            "direccion" => $_POST['perfil']['direccion'],
+            "edad" => $_POST['perfil']['edad'],
+            "email" => $_POST['perfil']['email'],
+            "horarioEntrada" => $_POST['perfil']['horarioEntrada'],
+            "team" => $_POST['perfil']['team'],
+            "trainer" => $_POST['perfil']['trainer'],
+            "cc" => $_POST['perfil']['cc'],
+        ];
+        $data = json_encode($data);
+
+        $credenciales["http"]["method"] = "PUT";
+        $credenciales["http"]["header"] = "Content-type: application/json";
+        $credenciales["http"]["content"] = $data;
+        $config = stream_context_create($credenciales);
+
+        $resultado = file_get_contents($urlPU, false, $config);
+    }
 }
     
     $url = 'https://6481e26229fa1c5c50323e5f.mockapi.io/formulario';
@@ -199,7 +200,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </thead>
                             <tbody>
                             <?php if(isset($tabla)){ 
-                                echo $tabla; 
+                                echo $tabla;  
                             } 
                             ?>
                         </tbody>
