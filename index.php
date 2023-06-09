@@ -3,11 +3,6 @@
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    if (isset($_POST['dar'])) {
-        $_SESSION['darID'] = $_POST['dar'];
-    }
-
     if (isset($_POST['agregar'])) {
         $credenciales["http"]["method"] = "POST";
         $credenciales["http"]["header"] = "Content-type: application/json";
@@ -39,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $idEliminar = null;
         foreach ($response as $item) {
-            if ($item['cc'] === $cedulaEliminar ) {
+            if ($item['cc'] === $cedulaEliminar) {
                 $idEliminar = $item['id'];
                 break;
             }
@@ -55,44 +50,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         
     }
-
-    if (isset($_POST['buscar'])) {
-  
-        $cedulaBuscar = $_POST['perfil']['cedula'];
-
-        $urlb = 'https://6481e26229fa1c5c50323e5f.mockapi.io/formulario';
-        $datab = file_get_contents($urlb);
-        $responseb = json_decode($datab, true);
-
-        $idBuscar = null;
-        foreach ($responseb as $item) {
-            if ($item['cc'] === $cedulaBuscar ) {
-                $idBuscar = $item['id'];
-                break;
-            }
+    if (isset($_POST['dar'])) {
+        if (isset($_POST['editar'])) {
+            $url = 'https://6481e26229fa1c5c50323e5f.mockapi.io/formulario/' . $_POST['dar'];
+            $data = [
+                "nombre" => $_POST['perfil']['nombre'],
+                "apellido" => $_POST['perfil']['apellido'],
+                "direccion" => $_POST['perfil']['direccion'],
+                "edad" => $_POST['perfil']['edad'],
+                "email" => $_POST['perfil']['email'],
+                "horarioEntrada" => $_POST['perfil']['horarioEntrada'],
+                "team" => $_POST['perfil']['team'],
+                "trainer" => $_POST['perfil']['trainer'],
+                "cc" => $_POST['perfil']['cc'],
+            ];
+            $data = json_encode($data);
+    
+            $credenciales["http"]["method"] = "PUT";
+            $credenciales["http"]["header"] = "Content-type: application/json";
+            $credenciales["http"]["content"] = $data;
+            $config = stream_context_create($credenciales);
+    
+            $resultado = file_get_contents($url, false, $config);
         }
-
-        $urlBu = 'https://6481e26229fa1c5c50323e5f.mockapi.io/formulario/'.$idBuscar;
-        $credencialesBu["http"]["method"] = "GET";
-        $credencialesBu["http"]["header"] = "Content-type: application/json"; 
-        $config = stream_context_create($credencialesBu);  
-        $resultado = file_get_contents($urlBu, false, $config);
-        $datab = json_decode($resultado, true);
-        
-        $nombre = $datab['nombre'];
-        $apellido = $datab['apellido'];
-        $direccion = $datab['direcccion'];
-        $edad = $datab['edad'];
-        $email = $datab['email'];
-        $horarioEntrada = $datab['horarioEntrada'];
-        $team = $datab['team'];
-        $trainer = $datab['trainer'];
-        $cc = $datab['cc'];
-        $id = $datab['id'];
     }
 
-
-    if (isset($_POST['dar'])){
+    if (isset($_POST['dar'])) {
         $urlG = 'https://6481e26229fa1c5c50323e5f.mockapi.io/formulario';
         $urlGet = $urlG . '/' . $_POST['dar'];
         $credencialesG["http"]["method"] = "GET";
@@ -110,31 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $team = $data['team'];
         $trainer = $data['trainer'];
         $cc = $data['cc'];
-        $id = $data['id'];
-    }
-
-    if (isset($_POST['editar'])) {
-        $urlPU = 'https://6481e26229fa1c5c50323e5f.mockapi.io/formulario/'.$_SESSION['darID'];
-        $data = [
-            "nombre" => $_POST['perfil']['nombre'],
-            "apellido" => $_POST['perfil']['apellido'],
-            "direccion" => $_POST['perfil']['direccion'],
-            "edad" => $_POST['perfil']['edad'],
-            "email" => $_POST['perfil']['email'],
-            "horarioEntrada" => $_POST['perfil']['horarioEntrada'],
-            "team" => $_POST['perfil']['team'],
-            "trainer" => $_POST['perfil']['trainer'],
-            "cc" => $_POST['perfil']['cc'],
-        ];
-        $data = json_encode($data);
-
-        $credenciales["http"]["method"] = "PUT";
-        $credenciales["http"]["header"] = "Content-type: application/json";
-        $credenciales["http"]["content"] = $data;
-        $config = stream_context_create($credenciales);
-
-        $resultado = file_get_contents($urlPU, false, $config);
-    }
+}
 }
     
     $url = 'https://6481e26229fa1c5c50323e5f.mockapi.io/formulario';
@@ -155,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <td>'.$item['horarioEntrada'].'</td>
                     <td>'.$item['team'].'</td>
                     <td>'.$item['trainer'].'</td>
-                    <td><button class="extraer" type="submit" name="dar" value="'.$item['id'].'"'.($item['id'] == $darID ? 'disabled' : '').'><i class="bi bi-caret-up-fill"></i></button></td>
+                    <td><button class="extraer" type="submit" name="dar" value="'.$item['id'].'"><i class="bi bi-caret-up-fill"></i></button></td>
                 </tr>
             ';
         }
@@ -210,17 +169,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="text" placeholder="Team" name="perfil[team]" autocomplete="off" value="<?php echo isset($team) ? $team :null;?>">
                     <input type="text" placeholder="Trainer" name="perfil[trainer]" autocomplete="off" value="<?php echo isset($trainer) ? $trainer :null;?>">
                 </div>
-                <div class="col gap-3 row-invert">
+                <div class="col gap-3">
                     <div class="gap">
                         <button type="submit" name="agregar" value="Botón 1"><i class="bi bi-check-lg"></i></button>
                         <button type="submit" name="eliminar" value="Botón 2"><i class="bi bi-x"></i></button>
                     </div>
                     <div class="gap">
                         <button type="submit" name="editar" value="Botón 3"><i class="bi bi-pencil"></i></button>
-                        <button type="submit" name="buscar" value="Botón 4"><i class="bi bi-search"></i></button>
+                        <button><i class="bi bi-search"></i></button>
                     </div>
                     <div class="gap">
-                        <input type="text" placeholder="Cedula" name="perfil[cedula]" autocomplete="off" value="<?php echo isset($cc) ? $cc : null; ?>">
+                        <input type="text" placeholder="Cedula" name="perfil[cedula]" autocomplete="off" value="<?php echo isset($cc) ? $cc : null; ?>" required>
                     </div>
                 </div>
             </div>
@@ -243,7 +202,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </thead>
                             <tbody>
                             <?php if(isset($tabla)){ 
-                                echo $tabla;  
+                                echo $tabla; 
                             } 
                             ?>
                         </tbody>
