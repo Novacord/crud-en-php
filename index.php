@@ -22,7 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $config = stream_context_create($credenciales);
 
         $_DATA = file_get_contents("https://6481e26229fa1c5c50323e5f.mockapi.io/formulario", false, $config);
-
     }
     if (isset($_POST['eliminar'])) {
   
@@ -179,7 +178,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <button><i class="bi bi-search"></i></button>
                     </div>
                     <div class="gap">
-                        <input type="text" placeholder="Cedula" name="perfil[cedula]" autocomplete="off" value="<?php echo isset($cc) ? $cc : null; ?>" required>
+                        <input type="text" placeholder="Cedula" name="perfil[cedula]" autocomplete="off" value="<?php echo isset($cc) ? $cc : null; ?>">
                     </div>
                 </div>
             </div>
