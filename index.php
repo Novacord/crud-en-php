@@ -3,6 +3,9 @@
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    
+
     if (isset($_POST['agregar'])) {
         $credenciales["http"]["method"] = "POST";
         $credenciales["http"]["header"] = "Content-type: application/json";
@@ -49,9 +52,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         
     }
-    if (isset($_POST['dar'])) {
+ 
+        
         if (isset($_POST['editar'])) {
-            $url = 'https://6481e26229fa1c5c50323e5f.mockapi.io/formulario/' . $_POST['dar'];
+            $urlE = 'https://6481e26229fa1c5c50323e5f.mockapi.io/formulario/'.$_SESSION['numero'];
             $data = [
                 "nombre" => $_POST['perfil']['nombre'],
                 "apellido" => $_POST['perfil']['apellido'],
@@ -70,11 +74,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $credenciales["http"]["content"] = $data;
             $config = stream_context_create($credenciales);
     
-            $resultado = file_get_contents($url, false, $config);
+            $resultado = file_get_contents($urlE, false, $config);
         }
-    }
+    
+
+
+
 
     if (isset($_POST['dar'])) {
+        $_SESSION['numero'] = $_POST['dar'];
         $urlG = 'https://6481e26229fa1c5c50323e5f.mockapi.io/formulario';
         $urlGet = $urlG . '/' . $_POST['dar'];
         $credencialesG["http"]["method"] = "GET";
@@ -92,7 +100,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $team = $data['team'];
         $trainer = $data['trainer'];
         $cc = $data['cc'];
-}
+    }
+
+    if(isset($_POST['buscar'])){
+        $cedulaBuscar = $_POST['perfil']['cedula'];
+        $urlb = 'https://6481e26229fa1c5c50323e5f.mockapi.io/formulario';
+        $datab = file_get_contents($urlb);
+        $responseb = json_decode($datab, true);
+    
+        $idBuscar = null;
+        foreach ($responseb as $item) {
+            if ($item['cc'] === $cedulaBuscar) {
+                $idBuscar = $item['id'];
+                break;
+            }
+        }
+            $urlBu = 'https://6481e26229fa1c5c50323e5f.mockapi.io/formulario/'.$idBuscar;
+            $credencialesBu["http"]["method"] = "GET";
+            $credencialesBu["http"]["header"] = "Content-type: application/json"; 
+            $config = stream_context_create($credencialesBu);  
+            $resultado = file_get_contents($urlBu, false, $config);
+            $datab = json_decode($resultado, true);
+    
+            $nombre = $datab['nombre'];
+            $apellido = $datab['apellido'];
+            $direccion = $datab['direccion'];
+            $edad = $datab['edad'];
+            $email = $datab['email'];
+            $horarioEntrada = $datab['horarioEntrada'];
+            $team = $datab['team'];
+            $trainer = $datab['trainer'];
+            $cc = $datab['cc'];
+            $id = $datab['id'];
+    }
+
 }
     
     $url = 'https://6481e26229fa1c5c50323e5f.mockapi.io/formulario';
@@ -175,7 +216,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="gap">
                         <button type="submit" name="editar" value="Botón 3"><i class="bi bi-pencil"></i></button>
-                        <button><i class="bi bi-search"></i></button>
+                        <button type="submit" name="buscar" value="Botón 4"><i class="bi bi-search"></i></button>
                     </div>
                     <div class="gap">
                         <input type="text" placeholder="Cedula" name="perfil[cedula]" autocomplete="off" value="<?php echo isset($cc) ? $cc : null; ?>">
